@@ -1,11 +1,67 @@
     <!DOCTYPE html>
-    <html lang="pt-br">
+    <html lang="pt-BR">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Calculadora de dose de agrotóxicos</title>
+        <title>Calculadora de dosagem para Agrotóxicos</title>
+        <style>
+            body { font-family: Arial, sans-serif; max-width: 500px; margin:50px auto; padding: 20px; background-color: #f9f9f9;}
+            .campo { margin-bottom: 20px }
+            label { display: block; font-weight: bold; margin-bottom: 8px; color: #333 }
+            input[type="number"] {width: 100%;padding: 10px; border: 1px solid #ccc; white; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; }
+            button:hover { background-color: #218838; }
+            #resultado { margin-top: 20px; padding: 15px; background: #e9ecef; border-left: 5px solid #28a745; display: none; }
+         </style>
     </head>
     <body>
         
+        <h2>Dados para pulverização</h2>
+
+        <!-- Campo 1 -->
+         <div class="campo">
+            <lambel for="area"> Qual é o tamanho da sua áreaa em hectares?</lambel>
+            <input type="number" id="area" step="0.1" placeholder="Ex: 50">
+         </div>
+
+         <!-- Campo 2 -->
+          <div class="campo">
+            <label for="dose"> Qual é a dose recomentada na bula do produto?</label>
+            <input type="number" id="dose" step="0.01" placeholder="Ex: 1.5">
+          </div>
+
+          <!-- Campo 3 -->
+           <div class="campo">
+               <label for="tanque">Qual é a capacidade do tanque do seu pulverizador (em litro)?</label>
+               <input type="number" id="tanque" step="1" placeholder="Ex: 2000">
+           </div>
+
+           <button onclick="salvarDados()">Enviar Respostas</button>
+           <div id="resultado"></div>
+
+           <script>
+               function salvarDados() {
+                const area = document.getElementeById('area'). value;
+                const dose = document.getElementById('dose').value;
+                const tanque = document.getElementById('tanque').value
+
+                if (!area|| !dose || !tanque) {
+                    alert("Por favor. preencha todos os campos!");
+                    return;
+                }
+
+                const resultadoDiv = document.getElementById('resulatado');
+                resultadoDiv.style.display = 'block';
+                resultadoDiv.innerHTML =
+                <strong>Dados Confirmados:</strong> 
+                 🌾 Área: ${area} hectares<br>
+                 🧪 Dose: ${dose} por hectares<br>
+                 💧 Tanque: ${tanque} litros
+                }
+                
+            `;
+
+
+           </script>
     </body>
+
     </html>
