@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Defensivos Agrícolas</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            max-width: 600px; 
+            margin: 40px auto; 
+            padding: 20px; 
+            background-color: #f4f7f6;
+            color: #333;
+        }
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #2e7d32;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .campo { 
+            margin-bottom: 20px; 
+        }
+        label { 
+            display: block; 
+            font-weight: bold; 
+            margin-bottom: 8px; 
+            color: #444; 
+        }
+        input[type="number"], select {
+            width: 100%;
+            padding: 12px; 
+            border: 2px solid #e0e0e0; 
+            border-radius: 6px; 
+            font-size: 16px; 
+            transition: border-color 0.3s;
+        }
+        input[type="number"]:focus, select:focus {
+            border-color: #2e7d32;
+            outline: none;
+        }
+        button { 
+            background-color: #2e7d32; 
+            color: white; 
+            border: none; 
+            padding: 14px; 
+            font-size: 16px; 
+            font-weight: bold;
+            border-radius: 6px; 
+            cursor: pointer; 
+            width: 100%;
+            transition: background-color 0.2s;
+        }
+        button:hover { 
+            background-color: #1b5e20; 
+        }
+        #resultado { 
+            margin-top: 25px; 
+            padding: 20px; 
+            background: #e8f5e9; 
+            border-left: 6px solid #2e7d32; 
+            border-radius: 4px;
+            display: none; 
+            line-height: 1.6;
+        }
+        .info-bula {
+            font-size: 14px;
+            color: #666;
+            margin-top: 4px;
+            font-style: italic;
+        }
+     </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Calculadora de Defensivos</h2>
+
+        <div class="campo">
+            <label for="cultura">O que está plantado?</label>
+            <select id="cultura" onchange="atualizarDoseRecomendada()">
+                <option value="soja">Soja (Ex: Lagarta / Percevejo)</option>
+                <option value="milho">Milho (Ex: Cigarrinha)</option>
+                <option value="cafe">Café (Ex: Bicho-mineiro / Ferrugem)</option>
+            </select>
+        </div>
+
+        <div class="campo">
+            <label for="area">Tamanho da área (em hectares):</label>
+            <input type="number" id="area" step="0.1" min="0.1" placeholder="Ex: 50">
+        </div>
+
+        <div class="campo">
+            <label for="dose">Dose recomendada do produto (L/ha ou kg/ha):</label>
+            <input type="number" id="dose" step="0.01" min="0.01" placeholder="Ex: 1.5">
+            <div id="dica-bula" class="info-bula">Dose média sugerida para Soja: 1.0 a 1.5 L/ha</div>
+        </div>
+
+        <button onclick="calcularQuantidade()">Calcular Quantidade Ideal</button>
+
+        <div id="resultado"></div>
+    </div>
+
+    <script>
+        // Doses médias de referência apenas para ajudar o usuário visualmente ao mudar a cultura
+        const dicasDose = {
+            soja: "Dose média sugerida para Soja: 1.0 a 1.5 L/ha",
+            milho: "Dose média sugerida para Milho: 0.8 a 1.2 L/ha",
+            cafe: "Dose média sugerida para Café: 2.0 a 3.5 L/ha"
+        };
+
+        function atualizarDoseRecomendada() {
+            const cultura = document.getElementById('cultura').value;
+            document.getElementById('dica-bula').innerText = dicasDose[cultura];
+        }
+
+        function calcularQuantidade() {
+            const culturaSelect = document.getElementById('cultura');
+            const culturaNome = culturaSelect.options[culturaSelect.selectedIndex].text.split(' (')[0];
+            
+            const area = parseFloat(document.getElementById('area').value);
+            const dosePorHectare = parseFloat(document.getElementById('dose').value);
+
+            // Validação simples
+            if (isNaN(area) || isNaN(dosePorHectare) || area <= 0 || dosePorHectare <= 0) {
+                alert("Por favor, insira valores válidos e maiores que zero para a área e a dose!");
+                return;
+            }
+
+            // Cálculo da quantidade total necessária do produto
+            const quantidadeTotal = area * dosePorHectare;
+
+            // Exibir resultado na tela
+            const resultadoDiv = document.getElementById('resultado');
+            resultadoDiv.style.display = 'block';
+            
+            resultadoDiv.innerHTML = `
+                <h3 style="color: #1b5e20; margin-bottom: 10px;">📋 Planejamento de Aplicação</h3>
+                <strong>Cultura Selecionada:</strong> ${culturaNome}<br>
+                <strong>Área Total:</strong> ${area.toFixed(1)} hectares<br>
+                <strong>Dose por Hectare:</strong> ${dosePorHectare.toFixed(2)} L (ou kg) por ha<br>
+                <hr style="margin: 10px 0; border: 0; border-top: 1px solid #c8e6c9;">
+                <span style="font-size: 18px;"><strong>Quantidade Total Ideal:</strong> <span style="color: #b71c1c; font-weight: bold;">${quantidadeTotal.toFixed(2)} Litros (ou kg)</span> do produto para cobrir toda a área.</span>
+            `;
+        }
+    </script>
+</body>
+</html>
